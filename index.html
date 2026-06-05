@@ -10,18 +10,6 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --coral: #D85A30;
-    --coral-light: #FAECE7;
-    --coral-dark: #712B13;
-    --blue: #378ADD;
-    --blue-light: #E6F1FB;
-    --blue-dark: #0C447C;
-    --purple: #534AB7;
-    --purple-light: #EEEDFE;
-    --purple-dark: #3C3489;
-    --teal: #1D9E75;
-    --teal-light: #E1F5EE;
-    --teal-dark: #085041;
     --gray-50: #F8F7F4;
     --gray-100: #EEECE8;
     --gray-300: #C5C3BB;
@@ -30,7 +18,6 @@
     --text: #1a1a18;
     --text-muted: #6b6b68;
     --text-hint: #9e9e9a;
-    --border: rgba(0,0,0,0.1);
     --radius: 12px;
     --radius-sm: 8px;
   }
@@ -54,31 +41,13 @@
     justify-content: flex-end;
   }
 
-  .intro-deco {
+  .intro-spacer {
     flex: 1;
     display: flex;
     align-items: center;
     justify-content: center;
     padding: 48px 32px 24px;
-    position: relative;
   }
-
-  .kolb-wheel {
-    width: 200px;
-    height: 200px;
-    border-radius: 50%;
-    position: relative;
-    overflow: hidden;
-  }
-
-  .wheel-q { position: absolute; top: 0; left: 50%; width: 50%; height: 50%; background: #D4537E; transform-origin: 0% 100%; }
-  .wheel-q::after { content: attr(data-label); position: absolute; top: 28%; left: 22%; font-size: 11px; font-weight: 500; color: #fff; letter-spacing: 0.04em; }
-  .wheel-q:nth-child(1) { transform: rotate(0deg); }
-  .wheel-q:nth-child(2) { transform: rotate(90deg); background: #378ADD; }
-  .wheel-q:nth-child(3) { transform: rotate(180deg); background: #534AB7; }
-  .wheel-q:nth-child(4) { transform: rotate(270deg); background: #1D9E75; }
-  .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 64px; height: 64px; border-radius: 50%; background: var(--gray-800); display: flex; align-items: center; justify-content: center; }
-  .wheel-center span { font-family: 'DM Serif Display', serif; font-size: 13px; color: white; letter-spacing: 0.1em; }
 
   .intro-card {
     background: white;
@@ -149,11 +118,27 @@
   }
   .start-btn:active { opacity: 0.85; }
 
-  /* ── QUIZ ── */
-  #screen-quiz {
-    background: var(--gray-50);
-    flex-direction: column;
+  /* ── KOLB WHEEL (shared) ── */
+  .kolb-wheel {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
   }
+
+  .wheel-q { position: absolute; top: 0; left: 50%; width: 50%; height: 50%; background: #D4537E; transform-origin: 0% 100%; }
+  .wheel-q::after { content: attr(data-label); position: absolute; top: 28%; left: 22%; font-size: 11px; font-weight: 500; color: #fff; letter-spacing: 0.04em; }
+  .wheel-q:nth-child(1) { transform: rotate(0deg); }
+  .wheel-q:nth-child(2) { transform: rotate(90deg); background: #378ADD; }
+  .wheel-q:nth-child(3) { transform: rotate(180deg); background: #534AB7; }
+  .wheel-q:nth-child(4) { transform: rotate(270deg); background: #1D9E75; }
+  .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .wheel-center span { font-family: 'DM Serif Display', serif; font-size: 13px; letter-spacing: 0.1em; }
+
+  /* ── QUIZ ── */
+  #screen-quiz { background: var(--gray-50); flex-direction: column; }
 
   .quiz-header {
     background: white;
@@ -171,41 +156,13 @@
     margin-bottom: 10px;
   }
 
-  .q-counter {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--text-muted);
-  }
+  .q-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+  .q-num { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); }
 
-  .q-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: var(--text);
-  }
-
-  .progress-track {
-    height: 3px;
-    background: var(--gray-100);
-    border-radius: 2px;
-  }
-
-  .progress-fill {
-    height: 3px;
-    background: var(--gray-800);
-    border-radius: 2px;
-    transition: width 0.4s ease;
-  }
+  .progress-track { height: 3px; background: var(--gray-100); border-radius: 2px; }
+  .progress-fill { height: 3px; background: var(--gray-800); border-radius: 2px; transition: width 0.4s ease; }
 
   .q-body { padding: 20px 20px 8px; }
-
-  .q-intro-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--text-hint);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 6px;
-  }
 
   .q-text {
     font-size: 18px;
@@ -223,15 +180,9 @@
     gap: 6px;
     margin-bottom: 14px;
   }
-
   .drag-hint svg { flex-shrink: 0; }
 
-  .options-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    padding-bottom: 4px;
-  }
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
 
   .option-item {
     background: white;
@@ -252,115 +203,70 @@
   .option-item.drag-over { border-color: var(--gray-800); box-shadow: 0 0 0 2px rgba(0,0,0,0.08); }
 
   .rank-badge {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-    font-weight: 500;
-    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500; flex-shrink: 0;
     transition: background 0.2s, color 0.2s;
-    background: var(--gray-100);
-    color: var(--text-muted);
+    background: var(--gray-100); color: var(--text-muted);
   }
-
   .rank-badge.r1 { background: var(--gray-800); color: white; }
   .rank-badge.r2 { background: var(--gray-300); color: var(--gray-800); }
   .rank-badge.r3 { background: var(--gray-100); color: var(--text-muted); }
   .rank-badge.r4 { background: var(--gray-50); color: var(--text-hint); border: 1px solid var(--gray-100); }
 
-  .option-letter {
-    font-size: 11px;
-    font-weight: 500;
-    color: var(--text-hint);
-    width: 14px;
-    flex-shrink: 0;
-  }
-
-  .option-text {
-    font-size: 14px;
-    color: var(--text);
-    flex: 1;
-    line-height: 1.4;
-  }
-
-  .grip-icon {
-    color: var(--gray-300);
-    flex-shrink: 0;
-  }
+  .option-letter { font-size: 11px; font-weight: 500; color: var(--text-hint); width: 14px; flex-shrink: 0; }
+  .option-text { font-size: 14px; color: var(--text); flex: 1; line-height: 1.4; }
+  .grip-icon { color: var(--gray-300); flex-shrink: 0; }
 
   .nav-bar {
-    display: flex;
-    gap: 10px;
+    display: flex; gap: 10px;
     padding: 12px 20px 32px;
     background: white;
     border-top: 1px solid var(--gray-100);
     margin-top: auto;
-    position: sticky;
-    bottom: 0;
+    position: sticky; bottom: 0;
   }
 
   .btn-prev {
     padding: 14px 20px;
-    background: var(--gray-50);
-    color: var(--text-muted);
-    border: 1px solid var(--gray-100);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    cursor: pointer;
+    background: var(--gray-50); color: var(--text-muted);
+    border: 1px solid var(--gray-100); border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; cursor: pointer;
     transition: background 0.15s;
   }
   .btn-prev:active { background: var(--gray-100); }
 
   .btn-next {
-    flex: 1;
-    padding: 14px;
-    background: var(--gray-800);
-    color: white;
-    border: none;
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: opacity 0.15s;
+    flex: 1; padding: 14px;
+    background: var(--gray-800); color: white;
+    border: none; border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
   }
   .btn-next:active { opacity: 0.85; }
 
   /* ── RESULTS ── */
-  #screen-result {
-    background: var(--gray-50);
-    flex-direction: column;
-  }
+  #screen-result { background: var(--gray-50); flex-direction: column; }
 
   .result-header {
     background: var(--gray-800);
-    padding: 48px 24px 32px;
+    padding: 40px 24px 32px;
     color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
   }
 
-  .result-eyebrow {
-    font-size: 11px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,0.5);
-    margin-bottom: 8px;
-  }
+  .result-wheel-wrap .wheel-center { background: var(--gray-800); }
+  .result-wheel-wrap .wheel-center span { color: white; }
 
   .result-title {
     font-family: 'DM Serif Display', serif;
     font-size: 28px;
+    color: white;
+    text-align: center;
     line-height: 1.2;
-    margin-bottom: 4px;
-  }
-
-  .result-sub {
-    font-size: 14px;
-    color: rgba(255,255,255,0.55);
   }
 
   .result-body { padding: 20px; flex: 1; }
@@ -372,118 +278,61 @@
     display: flex;
     align-items: center;
     gap: 14px;
-    position: relative;
-    overflow: hidden;
   }
 
   .score-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
     flex-shrink: 0;
-    font-size: 20px;
   }
+
+  .score-icon svg { width: 22px; height: 22px; }
 
   .score-info { flex: 1; min-width: 0; }
 
   .score-tag {
-    font-size: 10px;
-    font-weight: 500;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
     margin-bottom: 2px;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  .dominant-pill {
-    font-size: 9px;
-    padding: 2px 7px;
-    border-radius: 10px;
-    background: rgba(0,0,0,0.12);
-    letter-spacing: 0.04em;
   }
 
   .score-name {
-    font-size: 14px;
-    font-weight: 500;
+    font-size: 14px; font-weight: 500;
     margin-bottom: 8px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  .bar-track {
-    height: 5px;
-    border-radius: 3px;
-    background: rgba(0,0,0,0.1);
-  }
+  .bar-track { height: 5px; border-radius: 3px; background: rgba(0,0,0,0.1); }
+  .bar-fill { height: 5px; border-radius: 3px; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
 
-  .bar-fill {
-    height: 5px;
-    border-radius: 3px;
-    transition: width 0.8s cubic-bezier(0.22,1,0.36,1);
-  }
+  .score-pts { font-size: 20px; font-weight: 500; flex-shrink: 0; }
 
-  .score-pts {
-    font-size: 20px;
-    font-weight: 500;
-    flex-shrink: 0;
-  }
-
-  .result-footer {
-    padding: 0 20px 40px;
-    text-align: center;
-  }
+  .result-footer { padding: 0 20px 40px; text-align: center; }
 
   .restart-btn {
-    width: 100%;
-    padding: 14px;
-    background: white;
-    color: var(--text);
-    border: 1px solid var(--gray-100);
-    border-radius: var(--radius);
-    font-family: 'DM Sans', sans-serif;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background 0.15s;
+    width: 100%; padding: 14px;
+    background: white; color: var(--text);
+    border: 1px solid var(--gray-100); border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    cursor: pointer; transition: background 0.15s;
   }
   .restart-btn:active { background: var(--gray-100); }
 
-  .result-note {
-    font-size: 12px;
-    color: var(--text-hint);
-    margin-top: 16px;
-    line-height: 1.6;
-  }
+  .result-note { font-size: 12px; color: var(--text-hint); margin-top: 16px; line-height: 1.6; }
 </style>
 </head>
 <body>
 
 <!-- INTRO -->
 <div id="screen-intro" class="screen active">
-  <div class="intro-deco">
-    <div class="kolb-wheel">
-      <div class="wheel-q" data-label="Feel"></div>
-      <div class="wheel-q" data-label="Watch"></div>
-      <div class="wheel-q" data-label="Think"></div>
-      <div class="wheel-q" data-label="Do"></div>
-      <div class="wheel-center"><span>KOLB</span></div>
-    </div>
-  </div>
+  <div class="intro-spacer"></div>
   <div class="intro-card">
     <span class="intro-chip">Autoévaluation</span>
     <h1 class="intro-title">Mon style d'apprentissage</h1>
-    <p class="intro-desc">12 questions pour découvrir comment vous apprenez le mieux, selon le modèle de David Kolb.</p>
+    <p class="intro-desc">12 questions pour découvrir votre style d'apprentissage</p>
     <div class="rules-grid">
       <div class="rule-pill"><strong>Classez</strong>Ordonnez les 4 réponses selon vos préférences</div>
-      <div class="rule-pill"><strong>Points</strong>1re = 4 pts, 2e = 3 pts, 3e = 2 pts, 4e = 1 pt</div>
       <div class="rule-pill"><strong>Geste</strong>Faites glisser les réponses pour les réordonner</div>
-      <div class="rule-pill"><strong>Résultat</strong>Votre profil s'affiche à la fin</div>
     </div>
     <button class="start-btn" onclick="startQuiz()">Commencer ›</button>
   </div>
@@ -501,13 +350,12 @@
     </div>
   </div>
   <div class="q-body">
-    <p class="q-intro-label" id="q-intro-label">Classez de 1 à 4</p>
     <p class="q-text" id="q-text"></p>
     <div class="drag-hint">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
         <path d="M7 1v12M7 1L4 4M7 1l3 3M7 13L4 10M7 13l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
-      Faites glisser pour ordonner vos préférences
+      Faites glisser pour ordonner vos préférences de 1 à 4
     </div>
     <div class="options-list" id="options-list"></div>
   </div>
@@ -520,9 +368,16 @@
 <!-- RESULTS -->
 <div id="screen-result" class="screen">
   <div class="result-header">
-    <p class="result-eyebrow">Vos résultats</p>
-    <h2 class="result-title" id="result-dominant-title">Votre profil</h2>
-    <p class="result-sub" id="result-sub">Style d'apprentissage selon Kolb</p>
+    <div class="result-wheel-wrap">
+      <div class="kolb-wheel">
+        <div class="wheel-q" data-label="Feel"></div>
+        <div class="wheel-q" data-label="Watch"></div>
+        <div class="wheel-q" data-label="Think"></div>
+        <div class="wheel-q" data-label="Do"></div>
+        <div class="wheel-center"><span>KOLB</span></div>
+      </div>
+    </div>
+    <h2 class="result-title">Vos résultats</h2>
   </div>
   <div class="result-body">
     <div id="scores-container"></div>
@@ -549,11 +404,19 @@ const questions = [
   {intro:"J'apprends mieux lorsque...", opts:["Je suis réceptif et ouvert","Je suis prudent","J'analyse les idées","Je pratique"]}
 ];
 
+/* SVG icons inline */
+const icons = {
+  feel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 14.5 4 9a8 8 0 0 1 16 0c0 5.5-8 12-8 12z"/></svg>`,
+  watch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  think: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A6.5 6.5 0 0 1 16 8.5c0 2.5-1.4 4.7-3.5 5.8V17h-2v-2.7C8.4 13.2 7 11 7 8.5A6.5 6.5 0 0 1 9.5 2z"/><path d="M9.5 2h5"/><path d="M9 17h6"/><path d="M10 20h4"/><path d="M11 22h2"/></svg>`,
+  do: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V7a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M14 10V5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v6"/><path d="M10 10.5V9a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8c0 3.3 2.7 6 6 6h2a6 6 0 0 0 6-6v-2.5a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/></svg>`
+};
+
 const styles = [
-  {key:"A", name:"Expérience concrète",   tag:"Feel",  color:"#D4537E", light:"#FBEAF0", dark:"#72243E", icon:"♥"},
-  {key:"B", name:"Observation réfléchie", tag:"Watch", color:"#378ADD", light:"#E6F1FB", dark:"#0C447C", icon:"◉"},
-  {key:"C", name:"Conceptualisation abstraite", tag:"Think", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", icon:"◆"},
-  {key:"D", name:"Expérimentation active",tag:"Do",   color:"#1D9E75", light:"#E1F5EE", dark:"#085041", icon:"▶"}
+  {key:"A", name:"Expérience concrète",        tag:"Feel",  color:"#D4537E", light:"#FBEAF0", dark:"#72243E", icon:icons.feel},
+  {key:"B", name:"Observation réfléchie",       tag:"Watch", color:"#378ADD", light:"#E6F1FB", dark:"#0C447C", icon:icons.watch},
+  {key:"C", name:"Conceptualisation abstraite", tag:"Think", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", icon:icons.think},
+  {key:"D", name:"Expérimentation active",      tag:"Do",    color:"#1D9E75", light:"#E1F5EE", dark:"#085041", icon:icons.do}
 ];
 
 let current = 0;
@@ -606,35 +469,20 @@ function renderQ() {
 }
 
 function addDragEvents(el) {
-  el.addEventListener('dragstart', e => {
-    dragSrc = el;
-    el.classList.add('dragging');
-    e.dataTransfer.effectAllowed = 'move';
-  });
-  el.addEventListener('dragend', () => {
-    el.classList.remove('dragging');
-    document.querySelectorAll('.option-item').forEach(i => i.classList.remove('drag-over'));
-  });
-  el.addEventListener('dragover', e => {
-    e.preventDefault();
-    if (el !== dragSrc) el.classList.add('drag-over');
-  });
+  el.addEventListener('dragstart', e => { dragSrc = el; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+  el.addEventListener('dragend', () => { el.classList.remove('dragging'); document.querySelectorAll('.option-item').forEach(i => i.classList.remove('drag-over')); });
+  el.addEventListener('dragover', e => { e.preventDefault(); if (el !== dragSrc) el.classList.add('drag-over'); });
   el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
-  el.addEventListener('drop', e => {
-    e.preventDefault();
-    el.classList.remove('drag-over');
-    if (dragSrc && dragSrc !== el) swapItems(dragSrc, el);
-  });
+  el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('drag-over'); if (dragSrc && dragSrc !== el) swapItems(dragSrc, el); });
 }
 
 let touchStartY = 0, touchEl = null, cloneEl = null;
 function addTouchEvents(el) {
   el.addEventListener('touchstart', e => {
-    touchEl = el;
-    touchStartY = e.touches[0].clientY;
+    touchEl = el; touchStartY = e.touches[0].clientY;
     const rect = el.getBoundingClientRect();
     cloneEl = el.cloneNode(true);
-    cloneEl.style.cssText = `position:fixed;width:${rect.width}px;left:${rect.left}px;top:${rect.top}px;z-index:999;pointer-events:none;opacity:0.9;border:1.5px solid #2C2C2A;border-radius:12px;`;
+    cloneEl.style.cssText = `position:fixed;width:${rect.width}px;left:${rect.left}px;top:${rect.top}px;z-index:999;pointer-events:none;opacity:0.9;border:1.5px solid #2C2C2A;border-radius:12px;background:white;`;
     document.body.appendChild(cloneEl);
     el.style.opacity = '0.3';
   }, {passive:true});
@@ -682,26 +530,21 @@ function showResults() {
   orders.forEach(order => {
     order.forEach((optIdx, rankPos) => { totals[optIdx] += (4 - rankPos); });
   });
-  const max = Math.max(...totals);
   const sorted = totals.map((v,i) => ({v,i})).sort((a,b) => b.v - a.v);
-  const dominant = styles[sorted[0].i];
-
-  document.getElementById('result-dominant-title').textContent = dominant.name;
-  document.getElementById('result-sub').textContent = `Style dominant : ${dominant.tag} · Kolb`;
+  const max = sorted[0].v;
 
   const container = document.getElementById('scores-container');
   container.innerHTML = '';
   sorted.forEach(({v, i}) => {
     const s = styles[i];
     const pct = Math.round(v / 48 * 100);
-    const isDom = v === max;
     const card = document.createElement('div');
     card.className = 'score-card';
     card.style.background = s.light;
     card.innerHTML = `
-      <div class="score-icon" style="background:${s.color}22">${s.icon}</div>
+      <div class="score-icon" style="background:${s.color}22;color:${s.color}">${s.icon}</div>
       <div class="score-info">
-        <div class="score-tag" style="color:${s.dark}">${s.tag}${isDom ? '<span class="dominant-pill">dominant</span>' : ''}</div>
+        <div class="score-tag" style="color:${s.dark}">${s.tag}</div>
         <div class="score-name" style="color:${s.dark}">${s.name}</div>
         <div class="bar-track"><div class="bar-fill" data-pct="${pct}" style="width:0%;background:${s.color}"></div></div>
       </div>
