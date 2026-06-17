@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Mon style d'apprentissage — Kolb</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --gray-50: #F8F7F4;
+    --gray-100: #EEECE8;
+    --gray-300: #C5C3BB;
+    --gray-500: #888780;
+    --gray-800: #2C2C2A;
+    --text: #1a1a18;
+    --text-muted: #6b6b68;
+    --text-hint: #9e9e9a;
+    --radius: 12px;
+    --radius-sm: 8px;
+  }
+
+  html, body {
+    height: 100%;
+    font-family: 'DM Sans', sans-serif;
+    background: var(--gray-50);
+    color: var(--text);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .screen { display: none; min-height: 100vh; flex-direction: column; }
+  .screen.active { display: flex; }
+
+  /* ── INTRO ── */
+  #screen-intro {
+    background: var(--gray-800);
+    color: white;
+    padding: 0;
+    justify-content: flex-end;
+  }
+
+  .intro-spacer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 32px 24px;
+  }
+
+  .intro-card {
+    background: white;
+    border-radius: 28px 28px 0 0;
+    padding: 28px 24px 40px;
+  }
+
+  .intro-chip {
+    display: inline-block;
+    background: var(--gray-100);
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 12px;
+    text-transform: uppercase;
+  }
+
+  .intro-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 26px;
+    color: var(--text);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .intro-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    margin-bottom: 22px;
+  }
+
+  .rules-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .rule-pill {
+    background: var(--gray-50);
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius-sm);
+    padding: 10px 12px;
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.45;
+  }
+
+  .rule-pill strong { display: block; color: var(--text); font-weight: 500; margin-bottom: 2px; font-size: 13px; }
+
+  .start-btn {
+    width: 100%;
+    padding: 16px;
+    background: var(--gray-800);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.01em;
+    transition: opacity 0.15s;
+  }
+  .start-btn:active { opacity: 0.85; }
+
+  /* ── KOLB WHEEL (shared) ── */
+  .kolb-wheel {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .wheel-q { position: absolute; top: 0; left: 50%; width: 50%; height: 50%; background: #D4537E; transform-origin: 0% 100%; }
+  .wheel-q::after { content: attr(data-label); position: absolute; top: 28%; left: 22%; font-size: 11px; font-weight: 500; color: #fff; letter-spacing: 0.04em; }
+  .wheel-q:nth-child(1) { transform: rotate(0deg); }
+  .wheel-q:nth-child(2) { transform: rotate(90deg); background: #378ADD; }
+  .wheel-q:nth-child(3) { transform: rotate(180deg); background: #534AB7; }
+  .wheel-q:nth-child(4) { transform: rotate(270deg); background: #1D9E75; }
+  .wheel-center { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 64px; height: 64px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .wheel-center span { font-family: 'DM Serif Display', serif; font-size: 13px; letter-spacing: 0.1em; }
+
+  /* ── QUIZ ── */
+  #screen-quiz { background: var(--gray-50); flex-direction: column; }
+
+  .quiz-header {
+    background: white;
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--gray-100);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+
+  .quiz-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 10px;
+  }
+
+  .q-counter { font-size: 13px; font-weight: 500; color: var(--text-muted); }
+  .q-num { font-family: 'DM Serif Display', serif; font-size: 22px; color: var(--text); }
+
+  .progress-track { height: 3px; background: var(--gray-100); border-radius: 2px; }
+  .progress-fill { height: 3px; background: var(--gray-800); border-radius: 2px; transition: width 0.4s ease; }
+
+  .q-body { padding: 20px 20px 8px; }
+
+  .q-text {
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+    margin-bottom: 14px;
+  }
+
+  .drag-hint {
+    font-size: 12px;
+    color: var(--text-hint);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .drag-hint svg { flex-shrink: 0; }
+
+  .options-list { display: flex; flex-direction: column; gap: 8px; }
+
+  .option-item {
+    background: white;
+    border: 1px solid var(--gray-100);
+    border-radius: var(--radius);
+    padding: 14px 14px 14px 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: grab;
+    touch-action: none;
+    user-select: none;
+    transition: border-color 0.15s, box-shadow 0.15s, transform 0.1s;
+  }
+
+  .option-item:active { cursor: grabbing; }
+  .option-item.dragging { opacity: 0.4; transform: scale(0.98); }
+  .option-item.drag-over { border-color: var(--gray-800); box-shadow: 0 0 0 2px rgba(0,0,0,0.08); }
+
+  .rank-badge {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 500; flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+    background: var(--gray-100); color: var(--text-muted);
+  }
+  .rank-badge.r1 { background: var(--gray-800); color: white; }
+  .rank-badge.r2 { background: var(--gray-300); color: var(--gray-800); }
+  .rank-badge.r3 { background: var(--gray-100); color: var(--text-muted); }
+  .rank-badge.r4 { background: var(--gray-50); color: var(--text-hint); border: 1px solid var(--gray-100); }
+
+  .option-letter { font-size: 11px; font-weight: 500; color: var(--text-hint); width: 14px; flex-shrink: 0; }
+  .option-text { font-size: 14px; color: var(--text); flex: 1; line-height: 1.4; }
+  .grip-icon { color: var(--gray-300); flex-shrink: 0; }
+
+  .nav-bar {
+    display: flex; gap: 10px;
+    padding: 12px 20px 32px;
+    background: white;
+    border-top: 1px solid var(--gray-100);
+    margin-top: auto;
+    position: sticky; bottom: 0;
+  }
+
+  .btn-prev {
+    padding: 14px 20px;
+    background: var(--gray-50); color: var(--text-muted);
+    border: 1px solid var(--gray-100); border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; cursor: pointer;
+    transition: background 0.15s;
+  }
+  .btn-prev:active { background: var(--gray-100); }
+
+  .btn-next {
+    flex: 1; padding: 14px;
+    background: var(--gray-800); color: white;
+    border: none; border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+    cursor: pointer; transition: opacity 0.15s;
+  }
+  .btn-next:active { opacity: 0.85; }
+
+  /* ── RESULTS ── */
+  #screen-result { background: var(--gray-50); flex-direction: column; }
+
+  .result-header {
+    background: var(--gray-800);
+    padding: 40px 24px 32px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+  }
+
+  .result-wheel-wrap .wheel-center { background: var(--gray-800); }
+  .result-wheel-wrap .wheel-center span { color: white; }
+
+  .result-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 28px;
+    color: white;
+    text-align: center;
+    line-height: 1.2;
+  }
+
+  .result-body { padding: 20px; flex: 1; }
+
+  .score-card {
+    border-radius: var(--radius);
+    padding: 16px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .score-icon {
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .score-icon svg { width: 22px; height: 22px; }
+
+  .score-info { flex: 1; min-width: 0; }
+
+  .score-tag {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    margin-bottom: 2px;
+  }
+
+  .score-name {
+    font-size: 14px; font-weight: 500;
+    margin-bottom: 8px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .bar-track { height: 5px; border-radius: 3px; background: rgba(0,0,0,0.1); }
+  .bar-fill { height: 5px; border-radius: 3px; transition: width 0.8s cubic-bezier(0.22,1,0.36,1); }
+
+  .score-pts { font-size: 20px; font-weight: 500; flex-shrink: 0; }
+
+  .result-footer { padding: 0 20px 40px; text-align: center; }
+
+  .restart-btn {
+    width: 100%; padding: 14px;
+    background: white; color: var(--text);
+    border: 1px solid var(--gray-100); border-radius: var(--radius);
+    font-family: 'DM Sans', sans-serif; font-size: 15px;
+    cursor: pointer; transition: background 0.15s;
+  }
+  .restart-btn:active { background: var(--gray-100); }
+
+  .result-note { font-size: 12px; color: var(--text-hint); margin-top: 16px; line-height: 1.6; }
+</style>
+</head>
+<body>
+
+<!-- INTRO -->
+<div id="screen-intro" class="screen active">
+  <div class="intro-spacer"></div>
+  <div class="intro-card">
+    <span class="intro-chip">Autoévaluation</span>
+    <h1 class="intro-title">Mon style d'apprentissage</h1>
+    <p class="intro-desc">12 questions pour découvrir votre style d'apprentissage</p>
+    <div class="rules-grid">
+      <div class="rule-pill"><strong>Classez</strong>Ordonnez les 4 réponses selon vos préférences</div>
+      <div class="rule-pill"><strong>Geste</strong>Faites glisser les réponses pour les réordonner</div>
+    </div>
+    <button class="start-btn" onclick="startQuiz()">Commencer ›</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="screen-quiz" class="screen">
+  <div class="quiz-header">
+    <div class="quiz-meta">
+      <span class="q-counter" id="q-counter">Question 1 sur 12</span>
+      <span class="q-num" id="q-num">01</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progress-fill" style="width:0%"></div>
+    </div>
+  </div>
+  <div class="q-body">
+    <p class="q-text" id="q-text"></p>
+    <div class="drag-hint">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M7 1v12M7 1L4 4M7 1l3 3M7 13L4 10M7 13l3-3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      Faites glisser pour ordonner vos préférences de 1 à 4
+    </div>
+    <div class="options-list" id="options-list"></div>
+  </div>
+  <div class="nav-bar">
+    <button class="btn-prev" id="btn-prev" onclick="prevQ()">‹ Retour</button>
+    <button class="btn-next" id="btn-next" onclick="nextQ()">Suivant ›</button>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div id="screen-result" class="screen">
+  <div class="result-header">
+    <div class="result-wheel-wrap">
+      <div class="kolb-wheel">
+        <div class="wheel-q" data-label="Feel"></div>
+        <div class="wheel-q" data-label="Watch"></div>
+        <div class="wheel-q" data-label="Think"></div>
+        <div class="wheel-q" data-label="Do"></div>
+        <div class="wheel-center"><span>KOLB</span></div>
+      </div>
+    </div>
+    <h2 class="result-title">Vos résultats</h2>
+  </div>
+  <div class="result-body">
+    <div id="scores-container"></div>
+  </div>
+  <div class="result-footer">
+    <button class="restart-btn" onclick="restart()">↺ Recommencer</button>
+    <p class="result-note">Score maximum possible : 48 points par style (12 questions × 4 points)</p>
+  </div>
+</div>
+
+<script>
+const questions = [
+  {intro:"Lorsque j'apprends...", opts:["J'aime sentir","J'aime observer et écouter","J'aime réfléchir","J'aime faire les choses"]},
+  {intro:"J'apprends mieux lorsque...", opts:["Je me fie à mes intuitions","J'écoute et j'observe attentivement","Je me fie à la pensée logique","Je travaille dur pour y arriver"]},
+  {intro:"Pendant que j'apprends...", opts:["J'ai des sensations et réactions très fortes","Je suis calme et réservé","Je tends à raisonner","Je prends des responsabilités"]},
+  {intro:"J'apprends en...", opts:["Ressentant","Observant","Pensant","Faisant"]},
+  {intro:"Lorsque j'apprends...", opts:["Je suis ouvert à de nouvelles expériences","Je considère toutes les possibilités","J'aime analyser en détail","J'aime essayer"]},
+  {intro:"Pendant que j'apprends...", opts:["Je suis intuitif","J'observe","Je suis logique","Je suis actif"]},
+  {intro:"J'apprends le mieux par...", opts:["Relations personnelles","Observations","Théories rationnelles","L'occasion d'essayer et de participer"]},
+  {intro:"Lorsque j'apprends...", opts:["Je m'implique personnellement","Je prends du temps avant d'agir","J'aime les théories et les concepts","J'aime voir les résultats de mon travail"]},
+  {intro:"J'apprends le mieux lorsque...", opts:["Je me fie à mon intuition","Je me fie à mes observations","Je me fie à mes idées","Je peux essayer des choses"]},
+  {intro:"Pendant que j'apprends...", opts:["Je suis une personne ouverte","Je suis une personne réservée","Je suis une personne analytique","Je suis une personne active"]},
+  {intro:"Lorsque j'apprends...", opts:["Je m'y implique","J'aime observer","J'évalue les choses","J'aime être actif"]},
+  {intro:"J'apprends mieux lorsque...", opts:["Je suis réceptif et ouvert","Je suis prudent","J'analyse les idées","Je pratique"]}
+];
+
+/* SVG icons inline */
+const icons = {
+  feel: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 14.5 4 9a8 8 0 0 1 16 0c0 5.5-8 12-8 12z"/></svg>`,
+  watch: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>`,
+  think: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 2A6.5 6.5 0 0 1 16 8.5c0 2.5-1.4 4.7-3.5 5.8V17h-2v-2.7C8.4 13.2 7 11 7 8.5A6.5 6.5 0 0 1 9.5 2z"/><path d="M9.5 2h5"/><path d="M9 17h6"/><path d="M10 20h4"/><path d="M11 22h2"/></svg>`,
+  do: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V7a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/><path d="M14 10V5a2 2 0 0 0-2-2 2 2 0 0 0-2 2v6"/><path d="M10 10.5V9a2 2 0 0 0-2-2 2 2 0 0 0-2 2v8c0 3.3 2.7 6 6 6h2a6 6 0 0 0 6-6v-2.5a2 2 0 0 0-2-2 2 2 0 0 0-2 2"/></svg>`
+};
+
+const styles = [
+  {key:"A", name:"Expérience concrète",        tag:"Feel",  color:"#D4537E", light:"#FBEAF0", dark:"#72243E", icon:icons.feel},
+  {key:"B", name:"Observation réfléchie",       tag:"Watch", color:"#378ADD", light:"#E6F1FB", dark:"#0C447C", icon:icons.watch},
+  {key:"C", name:"Conceptualisation abstraite", tag:"Think", color:"#534AB7", light:"#EEEDFE", dark:"#3C3489", icon:icons.think},
+  {key:"D", name:"Expérimentation active",      tag:"Do",    color:"#1D9E75", light:"#E1F5EE", dark:"#085041", icon:icons.do}
+];
+
+let current = 0;
+let orders = Array.from({length:12}, () => [0,1,2,3]);
+let dragSrc = null;
+
+function show(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
+
+function startQuiz() {
+  show('screen-quiz');
+  renderQ();
+}
+
+function renderQ() {
+  const q = questions[current];
+  const n = current + 1;
+  document.getElementById('q-counter').textContent = `Question ${n} sur 12`;
+  document.getElementById('q-num').textContent = n.toString().padStart(2,'0');
+  document.getElementById('q-text').textContent = q.intro;
+  document.getElementById('progress-fill').style.width = (current / 12 * 100) + '%';
+  document.getElementById('btn-prev').style.visibility = current === 0 ? 'hidden' : 'visible';
+  document.getElementById('btn-next').textContent = current === 11 ? 'Voir mes résultats ›' : 'Suivant ›';
+
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+  orders[current].forEach((optIdx, rankPos) => {
+    const item = document.createElement('div');
+    item.className = 'option-item';
+    item.draggable = true;
+    item.dataset.opt = optIdx;
+    item.innerHTML = `
+      <div class="rank-badge r${rankPos+1}">${rankPos+1}</div>
+      <div class="option-letter">${['A','B','C','D'][optIdx]}</div>
+      <div class="option-text">${q.opts[optIdx]}</div>
+      <svg class="grip-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <circle cx="5.5" cy="4.5" r="1.2" fill="currentColor"/>
+        <circle cx="5.5" cy="8" r="1.2" fill="currentColor"/>
+        <circle cx="5.5" cy="11.5" r="1.2" fill="currentColor"/>
+        <circle cx="10.5" cy="4.5" r="1.2" fill="currentColor"/>
+        <circle cx="10.5" cy="8" r="1.2" fill="currentColor"/>
+        <circle cx="10.5" cy="11.5" r="1.2" fill="currentColor"/>
+      </svg>`;
+    addDragEvents(item);
+    addTouchEvents(item);
+    list.appendChild(item);
+  });
+}
+
+function addDragEvents(el) {
+  el.addEventListener('dragstart', e => { dragSrc = el; el.classList.add('dragging'); e.dataTransfer.effectAllowed = 'move'; });
+  el.addEventListener('dragend', () => { el.classList.remove('dragging'); document.querySelectorAll('.option-item').forEach(i => i.classList.remove('drag-over')); });
+  el.addEventListener('dragover', e => { e.preventDefault(); if (el !== dragSrc) el.classList.add('drag-over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+  el.addEventListener('drop', e => { e.preventDefault(); el.classList.remove('drag-over'); if (dragSrc && dragSrc !== el) swapItems(dragSrc, el); });
+}
+
+let touchStartY = 0, touchEl = null, cloneEl = null;
+function addTouchEvents(el) {
+  el.addEventListener('touchstart', e => {
+    touchEl = el; touchStartY = e.touches[0].clientY;
+    const rect = el.getBoundingClientRect();
+    cloneEl = el.cloneNode(true);
+    cloneEl.style.cssText = `position:fixed;width:${rect.width}px;left:${rect.left}px;top:${rect.top}px;z-index:999;pointer-events:none;opacity:0.9;border:1.5px solid #2C2C2A;border-radius:12px;background:white;`;
+    document.body.appendChild(cloneEl);
+    el.style.opacity = '0.3';
+  }, {passive:true});
+  el.addEventListener('touchmove', e => {
+    if (!cloneEl) return;
+    const dy = e.touches[0].clientY - touchStartY;
+    cloneEl.style.top = (parseFloat(cloneEl.style.top) + dy) + 'px';
+    touchStartY = e.touches[0].clientY;
+    const cx = e.touches[0].clientX, cy = e.touches[0].clientY;
+    document.querySelectorAll('.option-item').forEach(i => {
+      const r = i.getBoundingClientRect();
+      if (cx >= r.left && cx <= r.right && cy >= r.top && cy <= r.bottom && i !== touchEl) i.classList.add('drag-over');
+      else i.classList.remove('drag-over');
+    });
+  }, {passive:true});
+  el.addEventListener('touchend', () => {
+    if (cloneEl) { cloneEl.remove(); cloneEl = null; }
+    if (touchEl) touchEl.style.opacity = '';
+    const over = document.querySelector('.option-item.drag-over');
+    if (over && over !== touchEl) swapItems(touchEl, over);
+    document.querySelectorAll('.option-item').forEach(i => i.classList.remove('drag-over'));
+    touchEl = null;
+  });
+}
+
+function swapItems(a, b) {
+  const list = document.getElementById('options-list');
+  const items = [...list.children];
+  const ai = items.indexOf(a), bi = items.indexOf(b);
+  const order = orders[current];
+  [order[ai], order[bi]] = [order[bi], order[ai]];
+  renderQ();
+}
+
+function nextQ() {
+  if (current < 11) { current++; renderQ(); window.scrollTo(0,0); }
+  else showResults();
+}
+function prevQ() {
+  if (current > 0) { current--; renderQ(); window.scrollTo(0,0); }
+}
+
+function showResults() {
+  const totals = [0,0,0,0];
+  orders.forEach(order => {
+    order.forEach((optIdx, rankPos) => { totals[optIdx] += (4 - rankPos); });
+  });
+  const sorted = totals.map((v,i) => ({v,i})).sort((a,b) => b.v - a.v);
+  const max = sorted[0].v;
+
+  const container = document.getElementById('scores-container');
+  container.innerHTML = '';
+  sorted.forEach(({v, i}) => {
+    const s = styles[i];
+    const pct = Math.round(v / 48 * 100);
+    const card = document.createElement('div');
+    card.className = 'score-card';
+    card.style.background = s.light;
+    card.innerHTML = `
+      <div class="score-icon" style="background:${s.color}22;color:${s.color}">${s.icon}</div>
+      <div class="score-info">
+        <div class="score-tag" style="color:${s.dark}">${s.tag}</div>
+        <div class="score-name" style="color:${s.dark}">${s.name}</div>
+        <div class="bar-track"><div class="bar-fill" data-pct="${pct}" style="width:0%;background:${s.color}"></div></div>
+      </div>
+      <div class="score-pts" style="color:${s.dark}">${v}</div>`;
+    container.appendChild(card);
+  });
+  show('screen-result');
+  setTimeout(() => {
+    document.querySelectorAll('.bar-fill').forEach(b => { b.style.width = b.dataset.pct + '%'; });
+  }, 100);
+}
+
+function restart() {
+  current = 0;
+  orders = Array.from({length:12}, () => [0,1,2,3]);
+  show('screen-intro');
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
