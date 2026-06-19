@@ -69,15 +69,10 @@ html,body{height:100%;font-family:'Roboto',sans-serif;background:var(--gray50);c
 .res-header{background:#fff;padding:36px 24px 28px;display:flex;flex-direction:column;align-items:center;gap:16px;border-bottom:1px solid var(--gray100)}
 .wheel{width:160px;height:160px;border-radius:50%;position:relative;overflow:hidden;flex-shrink:0}
 .wq{position:absolute;top:0;left:50%;width:50%;height:50%;transform-origin:0% 100%}
-.wq:nth-child(1){transform:rotate(0deg);background:rgb(95,132,161)}
-.wq:nth-child(2){transform:rotate(90deg);background:rgb(245,128,32)}
-.wq:nth-child(3){transform:rotate(180deg);background:rgb(181,127,153)}
-.wq:nth-child(4){transform:rotate(270deg);background:rgb(137,170,126)}
-.wq span{position:absolute;top:28%;left:22%;transform:rotate(-1turn);display:inline-block;font-size:13px;font-weight:700;color:#fff;letter-spacing:.02em}
-.wq:nth-child(1) span{transform:rotate(0deg)}
-.wq:nth-child(2) span{transform:rotate(-90deg)}
-.wq:nth-child(3) span{transform:rotate(-180deg)}
-.wq:nth-child(4) span{transform:rotate(-270deg)}
+.wq:nth-child(1){transform:rotate(0deg);background:#D4537E}
+.wq:nth-child(2){transform:rotate(90deg);background:#378ADD}
+.wq:nth-child(3){transform:rotate(180deg);background:#534AB7}
+.wq:nth-child(4){transform:rotate(270deg);background:#1D9E75}
 .res-title{font-size:26px;font-weight:700;color:var(--text)}
 .res-body{padding:20px;flex:1}
 .score-card{border-radius:var(--radius);padding:16px;margin-bottom:10px;display:flex;align-items:center;gap:14px}
@@ -167,13 +162,13 @@ var Q=[
 ];
 
 var S=[
-  {n:"Expérience concrète",t:"EC",c:"rgb(95,132,161)",l:"#EAF0F4",d:"#2E4A5C",
+  {n:"Expérience concrète",t:"Feel",c:"#D4537E",l:"#FBEAF0",d:"#72243E",
    ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21C12 21 4 14.5 4 9a8 8 0 0 1 16 0c0 5.5-8 12-8 12z"/></svg>'},
-  {n:"Observation réfléchie",t:"OR",c:"rgb(245,128,32)",l:"#FEF0E5",d:"#8A4413",
+  {n:"Observation réfléchie",t:"Watch",c:"#378ADD",l:"#E6F1FB",d:"#0C447C",
    ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7z"/><circle cx="12" cy="12" r="3"/></svg>'},
-  {n:"Conceptualisation abstraite",t:"CA",c:"rgb(181,127,153)",l:"#F7EEF2",d:"#6B3B50",
+  {n:"Conceptualisation abstraite",t:"Think",c:"#534AB7",l:"#EEEDFE",d:"#3C3489",
    ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 2a6 6 0 0 1 6 6c0 2.2-1.2 4.1-3 5.2V16H12v-2.8C9.7 12 8 9.7 8 7A6 6 0 0 1 9 2z"/><line x1="9" y1="2" x2="15" y2="2"/><line x1="9" y1="16" x2="15" y2="16"/><line x1="10" y1="19" x2="14" y2="19"/><line x1="11" y1="22" x2="13" y2="22"/></svg>'},
-  {n:"Expérimentation active",t:"EA",c:"rgb(137,170,126)",l:"#EEF4EC",d:"#3E5B37",
+  {n:"Expérimentation active",t:"Do",c:"#1D9E75",l:"#E1F5EE",d:"#085041",
    ic:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11V7a2 2 0 0 0-4 0v4M14 10V5a2 2 0 0 0-4 0v6M10 10.5V9a2 2 0 0 0-4 0v8c0 3.3 2.7 6 6 6h2a6 6 0 0 0 6-6v-2.5a2 2 0 0 0-4 0"/></svg>'}
 ];
 
@@ -204,6 +199,7 @@ function render(){
     el.dataset.opt=oi;
     el.innerHTML=
       '<div class="rank r'+(rp+1)+'">'+(rp+1)+'</div>'+
+      '<div class="opt-letter">'+['A','B','C','D'][oi]+'</div>'+
       '<div class="opt-text">'+q.o[oi]+'</div>'+
       '<svg class="grip" width="16" height="16" viewBox="0 0 16 16" fill="none">'+
         '<circle cx="5.5" cy="4.5" r="1.2" fill="currentColor"/>'+
